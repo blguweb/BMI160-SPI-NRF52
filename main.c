@@ -56,7 +56,7 @@ int8_t spi_read_transfer(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, ui
 	ret_code_t ret ;
 	uint8_t read_temp[ length + 1 ] ;
 	reg_addr = reg_addr | 0x80; 
-  ret = nrf_drv_spi_transfer(&spi, &reg_addr, 1, read_temp, length + 1 ) ;	
+  	ret = nrf_drv_spi_transfer(&spi, &reg_addr, 1, read_temp, length + 1 ) ;	
 	nrf_delay_ms(5); 
 	for( int i = 1 ; i < length + 1 ; i ++ )
 	  reg_data[i-1] = read_temp[i] ;
@@ -73,7 +73,7 @@ int8_t spi_write_transfer(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, u
 	for( int i = 1 ; i < length + 1 ; i ++ )
 	  write_temp[i] = reg_data[i-1] ;
 
-  ret = nrf_drv_spi_transfer(&spi, write_temp, length + 1, &no_use, 1 ) ;
+	ret = nrf_drv_spi_transfer(&spi, write_temp, length + 1, &no_use, 1 ) ;
 	nrf_delay_ms(5) ;
 	
 	return (int8_t)ret;	
@@ -84,7 +84,7 @@ int main(void)
 {
 
 		nrf_drv_spi_config_t spi_config = NRF_DRV_SPI_DEFAULT_CONFIG;
-		// ÅäÖÃ´«¸ĞÆ÷µÄ¼ÓËÙ¶ÈºÍ½ÇËÙ¶È²ÎÊı
+		// é…ç½®ä¼ æ„Ÿå™¨çš„åŠ é€Ÿåº¦å’Œè§’é€Ÿåº¦å‚æ•°
 		struct bmi160_sensor_data accel;
 		struct bmi160_sensor_data gyro;
 		
@@ -107,7 +107,7 @@ int main(void)
     Print what to send or what received in SPI
     */
 		APP_ERROR_CHECK(nrf_drv_spi_init(&spi, &spi_config, spi_event_handler, NULL));
-//		UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());//´òÓ¡µ÷ÊÔĞÅÏ¢
+//		UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());//æ‰“å°è°ƒè¯•ä¿¡æ¯
 //		NRF_LOG_INFO("SPI example started.");
 //		NRF_LOG_FLUSH();
 		
@@ -123,7 +123,7 @@ int main(void)
 		rslt = bmi160_init(&sensor);
 
 		
-		// »ñÈ¡´«¸ĞÆ÷µÄchip id
+		// è·å–ä¼ æ„Ÿå™¨çš„chip id
 		uint8_t data;
 		rslt = bmi160_get_regs(BMI160_CHIP_ID_ADDR , &data , 1 , &sensor);
 		if (rslt == BMI160_OK) {
@@ -133,15 +133,15 @@ int main(void)
 		}
 
 		
-		// ÉèÖÃ¼ÓËÙ¶È¼ÆºÍÍÓÂİÒÇµÄÅäÖÃ
-    sensor.accel_cfg.odr = BMI160_ACCEL_ODR_100HZ; // ¼ÓËÙ¶È¼Æ²ÉÑùÂÊÎª100Hz
-    sensor.accel_cfg.range = BMI160_ACCEL_RANGE_2G; // ¼ÓËÙ¶È¼ÆÁ¿³ÌÎª¡À4g
-    sensor.accel_cfg.bw = BMI160_ACCEL_BW_NORMAL_AVG4; // ¼ÓËÙ¶È¼ÆÂË²¨Æ÷ÎªÕı³£Ä£Ê½
+		// è®¾ç½®åŠ é€Ÿåº¦è®¡å’Œé™€èºä»ªçš„é…ç½®
+		sensor.accel_cfg.odr = BMI160_ACCEL_ODR_100HZ; // åŠ é€Ÿåº¦è®¡é‡‡æ ·ç‡ä¸º100Hz
+		sensor.accel_cfg.range = BMI160_ACCEL_RANGE_2G; // åŠ é€Ÿåº¦è®¡é‡ç¨‹ä¸ºÂ±4g
+		sensor.accel_cfg.bw = BMI160_ACCEL_BW_NORMAL_AVG4; // åŠ é€Ÿåº¦è®¡æ»¤æ³¢å™¨ä¸ºæ­£å¸¸æ¨¡å¼
 		sensor.accel_cfg.power = BMI160_ACCEL_NORMAL_MODE; // power mode
 
-    sensor.gyro_cfg.odr = BMI160_GYRO_ODR_100HZ; // ÍÓÂİÒÇ²ÉÑùÂÊÎª100Hz
-    sensor.gyro_cfg.range = BMI160_GYRO_RANGE_2000_DPS; // ÍÓÂİÒÇÁ¿³ÌÎª¡À2000¡ã/s
-    sensor.gyro_cfg.bw = BMI160_GYRO_BW_NORMAL_MODE; // ÍÓÂİÒÇÂË²¨Æ÷ÎªÕı³£Ä£Ê½
+		sensor.gyro_cfg.odr = BMI160_GYRO_ODR_100HZ; // é™€èºä»ªé‡‡æ ·ç‡ä¸º100Hz
+		sensor.gyro_cfg.range = BMI160_GYRO_RANGE_2000_DPS; // é™€èºä»ªé‡ç¨‹ä¸ºÂ±2000Â°/s
+		sensor.gyro_cfg.bw = BMI160_GYRO_BW_NORMAL_MODE; // é™€èºä»ªæ»¤æ³¢å™¨ä¸ºæ­£å¸¸æ¨¡å¼
 		sensor.gyro_cfg.power = BMI160_GYRO_NORMAL_MODE; // power mode
 		// set configuration
 		rslt = bmi160_set_sens_conf(&sensor);
@@ -155,11 +155,11 @@ int main(void)
 
     while (1)
     {
-			        // ¶ÁÈ¡¼ÓËÙ¶È¼ÆºÍÍÓÂİÒÇµÄÊı¾İ
+			        // è¯»å–åŠ é€Ÿåº¦è®¡å’Œé™€èºä»ªçš„æ•°æ®
         rslt = bmi160_get_sensor_data((BMI160_ACCEL_SEL | BMI160_GYRO_SEL | BMI160_TIME_SEL), &accel, &gyro, &sensor);
         if (rslt != BMI160_OK)
         {
-            // ´¦Àí¶ÁÈ¡Ê§°ÜµÄÇé¿ö
+            // å¤„ç†è¯»å–å¤±è´¥çš„æƒ…å†µ
 //					NRF_LOG_INFO("error read: ");
 //					NRF_LOG_FLOAT(rslt);
 //					SEGGER_RTT_printf(0,"error read: %d\n",rslt);
@@ -168,7 +168,7 @@ int main(void)
 				else
 				{
 
-					// ×ª»»Ô­Ê¼Êı¾İÎªÎïÀíÖµ£¬µ¥Î»ÎªmgºÍ¡ã/s
+					// è½¬æ¢åŸå§‹æ•°æ®ä¸ºç‰©ç†å€¼ï¼Œå•ä½ä¸ºmgå’ŒÂ°/s
 					float ax = (float)(accel.x * 9.8) / 16384;
 					float ay = (float)(accel.y * 9.8) / 16384;
 					float az = (float)(accel.z * 9.8) / 16384;
@@ -183,7 +183,7 @@ int main(void)
 //					float gy = (float)gyro.y * 0.061f;
 //					float gz = (float)gyro.z * 0.061f;
 
-					// ÔÚÕâÀï´¦Àí»òÏÔÊ¾Êı¾İ
+					// åœ¨è¿™é‡Œå¤„ç†æˆ–æ˜¾ç¤ºæ•°æ®
 
 
 					char axs[32];
@@ -205,7 +205,7 @@ int main(void)
 					SEGGER_RTT_printf(0,"gyroy: %s\n",gys);
 					SEGGER_RTT_printf(0,"gyroz: %s\n",gzs);
 
-					sensor.delay_ms(10); // ÑÓÊ±10ms
+					sensor.delay_ms(10); // å»¶æ—¶10ms
 				}
 			
     }
