@@ -90,8 +90,8 @@ int main(void)
 		
 
 //		bsp_board_init(BSP_INIT_LEDS);
-    APP_ERROR_CHECK(NRF_LOG_INIT(NULL));
-    NRF_LOG_DEFAULT_BACKENDS_INIT();
+		APP_ERROR_CHECK(NRF_LOG_INIT(NULL));
+		NRF_LOG_DEFAULT_BACKENDS_INIT();
 
 		spi_config.ss_pin   = CS_PIN;
 		spi_config.miso_pin = MISO_PIN;
